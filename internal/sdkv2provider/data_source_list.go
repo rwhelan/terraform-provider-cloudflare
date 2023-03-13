@@ -55,6 +55,7 @@ func dataSourceCloudflareListRead(ctx context.Context, d *schema.ResourceData, m
 	tflog.Debug(ctx, "reading list")
 
 	lists, err := client.ListLists(ctx, cloudflare.AccountIdentifier(accountID), cloudflare.ListListsParams{})
+
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("failed to fetch Cloudflare lists: %w", err))
 	}
