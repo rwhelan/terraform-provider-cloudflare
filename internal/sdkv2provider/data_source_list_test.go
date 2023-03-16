@@ -22,16 +22,30 @@ func TestAccCloudflareListDataSource(t *testing.T) {
 		ProviderFactories: providerFactories,
 		Steps: []resource.TestStep{
 			{
+				Config: testAccCheckCloudflareListCreate(accountID, rnd),
+			},
+			{
 				Config: testAccCheckCloudflareListDataSource(accountID, rnd),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(name, consts.AccountIDSchemaKey, accountID),
 					resource.TestCheckResourceAttr(name, "account_id", accountID),
 					resource.TestCheckResourceAttr(name, "name", rnd),
+					resource.TestCheckResourceAttr(name, "kind", "ip"),
+					resource.TestCheckResourceAttr(name, "numitems", "0"),
 				),
-				PreventPostDestroyRefresh: true,
 			},
 		},
 	})
+}
+
+func testAccCheckCloudflareListCreate(accountID, name string) string {
+	return fmt.Sprintf(`
+resource "cloudflare_list" "%[1]s" {
+  account_id  = "%[2]s"
+  name        = "%[1]s"
+  kind        = "ip"
+}
+`, name, accountID)
 }
 
 func testAccCheckCloudflareListDataSource(accountID, name string) string {
@@ -39,11 +53,11 @@ func testAccCheckCloudflareListDataSource(accountID, name string) string {
 resource "cloudflare_list" "%[1]s" {
   account_id  = "%[2]s"
   name        = "%[1]s"
-  kind        = "redirect"
+  kind        = "ip"
 }
 
 data "cloudflare_list" "%[1]s" {
   account_id = "%[2]s"
-  name = "%[1]s"
+  name       = "%[1]s"
 }`, name, accountID)
 }

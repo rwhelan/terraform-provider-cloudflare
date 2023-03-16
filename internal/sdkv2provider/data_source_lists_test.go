@@ -25,7 +25,6 @@ func TestAccCloudflareListsDataSource(t *testing.T) {
 				Config: testAccCheckCloudflareListsDataSource(accountID, rnd),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(name, consts.AccountIDSchemaKey, accountID),
-					resource.TestCheckResourceAttr(name, "account_id", accountID),
 				),
 			},
 		},
@@ -34,12 +33,6 @@ func TestAccCloudflareListsDataSource(t *testing.T) {
 
 func testAccCheckCloudflareListsDataSource(accountID, name string) string {
 	return fmt.Sprintf(`
-resource "cloudflare_list" "%[1]s" {
-  account_id  = "%[2]s"
-  name        = "%[1]s"
-  kind        = "redirect"
-}
-
 data "cloudflare_lists" "%[1]s" {
   account_id = "%[2]s"
 }`, name, accountID)
