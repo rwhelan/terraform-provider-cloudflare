@@ -79,7 +79,6 @@ func TestAccCloudflareList_Exists(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						name, "name", rnd),
 				),
-				Destroy: false,
 			},
 		},
 	})
